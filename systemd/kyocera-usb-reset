@@ -1,0 +1,6 @@
+#!/bin/sh
+# Letat: post = juste apres le reveil (suspend/hibernate).
+case "$1" in
+    post) /usr/local/sbin/kyocera-usb-reset.sh ;;
+esac
+exit 0

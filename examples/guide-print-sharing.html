@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<title>Configurer l'imprimante Kyocera FS-1220MFP</title>
+<style>
+  @page { size: A4; margin: 18mm 16mm 16mm 16mm; }
+  * { box-sizing: border-box; }
+  body {
+    font-family: "DejaVu Sans", "Liberation Sans", Arial, sans-serif;
+    color: #1c2533;
+    font-size: 10.5pt;
+    line-height: 1.45;
+    margin: 0;
+  }
+  header {
+    border-bottom: 3px solid #0b66c3;
+    padding-bottom: 10px;
+    margin-bottom: 14px;
+  }
+  h1 { font-size: 20pt; margin: 0 0 4px 0; color: #0b3f7a; }
+  .sub { color: #5a6b80; font-size: 10pt; margin: 0; }
+  h2 {
+    font-size: 13pt;
+    color: #0b3f7a;
+    border-left: 5px solid #0b66c3;
+    padding-left: 8px;
+    margin: 18px 0 8px 0;
+    page-break-after: avoid;
+  }
+  h3 { font-size: 11pt; color: #124a86; margin: 12px 0 4px 0; page-break-after: avoid; }
+  p { margin: 5px 0; }
+  ol, ul { margin: 5px 0 5px 0; padding-left: 20px; }
+  li { margin: 2px 0; }
+  code, .addr {
+    font-family: "DejaVu Sans Mono", "Liberation Mono", monospace;
+    background: #eef3fb;
+    border: 1px solid #cdddf3;
+    border-radius: 4px;
+    padding: 1px 5px;
+    font-size: 9.5pt;
+    color: #0b3f7a;
+  }
+  .addr { display: inline-block; padding: 2px 7px; }
+  .box {
+    background: #eef6ff;
+    border: 1px solid #bcd7f5;
+    border-radius: 6px;
+    padding: 9px 12px;
+    margin: 10px 0;
+    page-break-inside: avoid;
+  }
+  .box.warn { background: #fff6e8; border-color: #f0c98a; }
+  .box.ok   { background: #eefaf1; border-color: #9fd9b0; }
+  .box h3 { margin-top: 0; }
+  table { border-collapse: collapse; width: 100%; margin: 8px 0; page-break-inside: avoid; }
+  th, td { border: 1px solid #cdd7e5; padding: 6px 8px; text-align: left; font-size: 10pt; }
+  th { background: #e8f0fa; color: #0b3f7a; }
+  .kbd { font-weight: bold; }
+  .grid { display: table; width: 100%; }
+  .badge {
+    display: inline-block; background: #0b66c3; color: #fff;
+    border-radius: 10px; padding: 1px 9px; font-size: 9pt; font-weight: bold;
+  }
+  .step-title { font-weight: bold; color: #124a86; }
+  footer {
+    margin-top: 18px; border-top: 1px solid #cdd7e5; padding-top: 6px;
+    color: #7a8798; font-size: 8.5pt; text-align: center;
+  }
+  .avoid { page-break-inside: avoid; }
+  section { page-break-inside: auto; }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>Imprimer sur l'imprimante <span style="color:#0b66c3">Kyocera FS-1220MFP</span></h1>
+  <p class="sub">Guide de configuration — Chromebook, Windows, Android, iPhone / iPad</p>
+</header>
+
+<div class="box ok">
+  <h3>L'essentiel en une ligne</h3>
+  <p>L'imprimante est branchée en USB au PC <b>um560</b> (Debian), qui la partage sur le réseau local.
+  Depuis n'importe quel appareil du même réseau, ajoutez l'imprimante à l'adresse&nbsp;:</p>
+  <p><span class="addr">ipp://192.168.42.120:631/printers/Kyocera_FS-1220MFP</span></p>
+  <p style="margin-bottom:0">ou, si l'adresse change, via son nom réseau&nbsp;:
+  <span class="addr">ipp://um560.local:631/printers/Kyocera_FS-1220MFP</span></p>
+</div>
+
+<h2>Avant de commencer (prérequis)</h2>
+<ul>
+  <li>Le PC <b>um560</b> doit être <b>allumé et éveillé</b> (c'est lui le serveur d'impression).</li>
+  <li>L'appareil (Chromebook, PC, téléphone) doit être sur le <b>même réseau</b> que <b>um560</b> (Wi-Fi ou câble).</li>
+  <li>Aucun pilote à télécharger&nbsp;: on utilise l'impression réseau standard (IPP / AirPrint / Mopria).</li>
+</ul>
+
+<h2><span class="badge">1</span> Chromebook</h2>
+<ol>
+  <li>Connecte-toi au même Wi-Fi que <b>um560</b>.</li>
+  <li>Ouvre <b>Paramètres</b> &rarr; <b>Imprimantes</b> (ou <b>Périphériques</b> &rarr; <b>Imprimantes</b>).</li>
+  <li>L'imprimante peut apparaître <b>automatiquement</b> sous le nom
+      «&nbsp;Kyocera FS-1220MFP @ um560&nbsp;». Si oui, clique dessus, c'est fini.</li>
+  <li>Sinon, clique sur <b>Ajouter une imprimante</b> (ajout manuel) et saisis l'adresse&nbsp;:
+      <br><span class="addr">ipp://192.168.42.120:631/printers/Kyocera_FS-1220MFP</span>
+      <br>Puis <b>Ajouter</b>.</li>
+  <li>Pour imprimer&nbsp;: dans n'importe quelle application, <span class="kbd">Ctrl + P</span>,
+      choisis <b>Kyocera FS-1220MFP</b>.</li>
+</ol>
+
+<h2><span class="badge">2</span> Windows 10 / 11</h2>
+<ol>
+  <li>Ouvre <b>Paramètres</b> &rarr; <b>Bluetooth et appareils</b> &rarr; <b>Imprimantes et scanners</b>.</li>
+  <li>Clique sur <b>Ajouter une imprimante ou un scanner</b>.</li>
+  <li>Attends la détection. Si l'imprimante n'apparaît pas, clique sur
+      <b>«&nbsp;L'imprimante que je recherche n'est pas dans la liste&nbsp;»</b>.</li>
+  <li>Sélectionne <b>«&nbsp;Sélectionner une imprimante partagée par son nom&nbsp;»</b> et saisis&nbsp;:
+      <br><span class="addr">http://192.168.42.120:631/printers/Kyocera_FS-1220MFP</span></li>
+  <li>Clique sur <b>Suivant</b>. Si Windows demande un pilote, choisis
+      <b>Microsoft IPP Class Driver</b> (ou <b>Générique</b>) dans la liste.</li>
+  <li>Nomme l'imprimante, termine, et coche éventuellement
+      <b>Définir comme imprimante par défaut</b>.</li>
+</ol>
+<div class="box warn">
+  <b>Astuce&nbsp;:</b> dans Chrome / Edge, <span class="kbd">Ctrl + P</span> fonctionne aussi.
+  Si l'ajout par URL échoue, vérifie que le PC <b>um560</b> est bien allumé.
+</div>
+
+<h2><span class="badge">3</span> Android (téléphone / tablette)</h2>
+<ol>
+  <li>Connecte l'appareil au même Wi-Fi que <b>um560</b>.</li>
+  <li>Active le service d'impression&nbsp;: <b>Paramètres</b> &rarr; <b>Connexions</b> /
+      <b>Appareils connectés</b> &rarr; <b>Impression</b> &rarr;
+      <b>Service d'impression par défaut</b> (ou installe <i>Mopria Print Service</i> depuis le Play Store).</li>
+  <li>Ouvre un document, une page web ou une photo &rarr; menu <b>Partager</b> / <b>Imprimer</b>.</li>
+  <li>Sélectionne <b>Kyocera FS-1220MFP</b> (détectée automatiquement sur le réseau).</li>
+</ol>
+
+<h2><span class="badge">4</span> iPhone / iPad (AirPrint)</h2>
+<ol>
+  <li>Connecte l'appareil au même Wi-Fi que <b>um560</b>.</li>
+  <li>Ouvre un document / une page &rarr; icône <b>Partager</b> &rarr; <b>Imprimer</b>.</li>
+  <li>Dans <b>Imprimante</b>, sélectionne <b>Kyocera FS-1220MFP</b> (ou l'entrée contenant <b>@ um560</b>).</li>
+  <li>Règle les options puis touche <b>Imprimer</b>.</li>
+</ol>
+<div class="box">
+  AirPrint repose sur la découverte automatique (mDNS). Si l'imprimante n'apparaît pas,
+  vérifie que le Wi-Fi n'isole pas les appareils entre eux (option «&nbsp;isolation client&nbsp;» du routeur).
+</div>
+
+<h2>Dépannage rapide</h2>
+<table>
+  <tr><th>Problème</th><th>Solution</th></tr>
+  <tr>
+    <td>Rien ne sort</td>
+    <td>Le PC <b>um560</b> est-il allumé et sorti de veille&nbsp;? L'imprimante est branchée dessus.</td>
+  </tr>
+  <tr>
+    <td>L'imprimante n'est pas listée</td>
+    <td>Même réseau&nbsp;? Sinon saisis l'adresse IPP à la main (voir encadré en haut).</td>
+  </tr>
+  <tr>
+    <td>L'adresse ne répond plus</td>
+    <td>Utilise le nom <span class="addr">um560.local</span> au lieu de l'IP.</td>
+  </tr>
+  <tr>
+    <td>Vérifier que le serveur répond</td>
+    <td>Dans un navigateur&nbsp;: <span class="addr">http://192.168.42.120:631/printers/Kyocera_FS-1220MFP</span></td>
+  </tr>
+</table>
+
+<div class="box">
+  <h3>Pourquoi passer par <b>um560</b>&nbsp;?</h3>
+  <p style="margin-bottom:0">Cette Kyocera est une imprimante «&nbsp;hôte&nbsp;» (langage KPSL&nbsp;/ GDI)&nbsp;:
+  elle ne comprend ni PostScript ni PCL et n'est donc pas pilotable directement en réseau.
+  Le PC Debian joue le rôle de <b>serveur d'impression</b>&nbsp;: il reçoit les documents en
+  IPP/AirPrint et les convertit en KPSL pour l'imprimante (filtre libre <i>rastertokpsl-re</i>).</p>
+</div>
+
+<footer>
+  Guide d'impression — Kyocera FS-1220MFP partagée par <b>um560</b> (Debian) &middot;
+  Adresse serveur&nbsp;: 192.168.42.120 &middot; Généré le 20/09/2026
+</footer>
+
+</body>
+</html>

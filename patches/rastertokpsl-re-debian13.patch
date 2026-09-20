@@ -1,0 +1,25 @@
+diff --git a/src/CMakeLists.txt b/src/CMakeLists.txt
+index 786dff5..ca73129 100644
+--- a/src/CMakeLists.txt
++++ b/src/CMakeLists.txt
+@@ -9,4 +9,4 @@ set(SOURCE_FILES
+         main.c)
+ 
+ add_executable(rastertokpsl-re ${SOURCE_FILES})
+-target_link_libraries(rastertokpsl-re ${CUPS_LIB} ${CUPSIMAGE_LIB})
+\ No newline at end of file
++target_link_libraries(rastertokpsl-re ${CUPS_LIB} ${CUPSIMAGE_LIB} m)
+\ No newline at end of file
+diff --git a/src/rastertokpsl.c b/src/rastertokpsl.c
+index 1882d01..09dfed7 100644
+--- a/src/rastertokpsl.c
++++ b/src/rastertokpsl.c
+@@ -476,7 +476,7 @@ int rastertokpsl(cups_raster_t *ras, const char *user, const char *title, int co
+         cups_page_header2_t header;       /* Page header from file */
+         //ppd_file_t *ppd;                /* PPD file - not used in the rastertokpsl anymore */
+ 
+-        sigset(SIGTERM, CancelJob);
++        signal(SIGTERM, CancelJob);
+ 
+         /*
+          * Make sure status messages are not buffered...
