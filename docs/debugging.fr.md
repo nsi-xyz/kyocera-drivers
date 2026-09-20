@@ -395,6 +395,11 @@ Remarque : le backend **arrondit** la résolution demandée (ex. 100/150 → 200
 Une interface graphique (`simple-scan`, `skanlite`, `xsane`, `gscan2pdf`)
 fonctionne par-dessus.
 
+La touche **[Numériser]** du panneau est une fonction *push* (« Numérisation
+directe » / « Numérisation rapide ») qui nécessite le **Client Tool** de Kyocera
+(Windows uniquement) ; elle ne fonctionne pas avec SANE, qui est *pull*. La
+touche **[Copier]** du panneau, elle, fonctionne de façon autonome.
+
 ## 6. Récapitulatif des modifications système
 
 | Élément | Action |

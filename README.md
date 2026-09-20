@@ -178,6 +178,13 @@ The Kyocera SANE driver is **proprietary, free of charge, and not redistributed
 here** — the script downloads it from Kyocera's support site. See
 [`CREDITS.md`](CREDITS.md).
 
+**Limitation — the panel [Scan] button does not work on Linux.** On this model
+the button triggers a *push* scan ("Direct scan" / "Quick scan": to PDF, e-mail
+or folder) that is driven by Kyocera's **Client Tool**, a Windows-only utility.
+The SANE backend is *pull*-only (you start the scan from the PC), so pressing
+[Scan] on the machine has no effect without that Windows software. The panel
+**[Copy]** function, by contrast, works standalone.
+
 ## Applicable to other models?
 
 Yes, the **method** generalizes to many abandoned GDI/KPSL Kyocera models (and

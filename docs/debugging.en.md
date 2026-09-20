@@ -319,6 +319,10 @@ crw-rw---- 1 root scanner 189, 8 ... /dev/bus/usb/001/009
 Note: the backend **rounds** resolution requests (e.g. 100/150 → 200 dpi). A GUI
 frontend (`simple-scan`, `skanlite`, `xsane`, `gscan2pdf`) works on top of it.
 
+The panel **[Scan]** button is a *push* feature ("Direct scan" / "Quick scan")
+that requires Kyocera's **Client Tool** (Windows-only); it does not work with
+SANE, which is *pull*-only. The panel **[Copy]** function works standalone.
+
 ## 6. Summary of system changes
 
 | Item | Action |

@@ -178,6 +178,14 @@ Le pilote SANE Kyocera est **propriétaire, gratuit, et non redistribué ici** �
 le script le télécharge depuis le site de support Kyocera. Voir
 [`CREDITS.md`](CREDITS.md).
 
+**Limite — le bouton [Numériser] du panneau ne marche pas sous Linux.** Sur ce
+modèle, la touche déclenche une numérisation *push* (« Numérisation directe » /
+« Numérisation rapide » : vers PDF, e-mail ou dossier) pilotée par le
+**KYOCERA Client Tool**, un utilitaire **Windows**. Le backend SANE est *pull*
+(on lance le scan depuis le PC) ; appuyer sur [Numériser] sur la machine n'a donc
+aucun effet sans ce logiciel Windows. La touche **[Copier]** du panneau, elle,
+fonctionne de façon autonome.
+
 ## Applicable à d'autres modèles ?
 
 Oui, la **méthode** se généralise à de nombreux modèles Kyocera GDI/KPSL
