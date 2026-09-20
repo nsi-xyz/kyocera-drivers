@@ -68,6 +68,9 @@ qui est **documenté / attendu**.
 | Parité KPSL | filtre libre vs constructeur | `kpslcmp.pl` sur des rasters identiques (tailles identiques ; seule une petite zone terminale diffère) | ✅ vérifié |
 | Impression USB | page texte, PDF 2 pages, titre de 79 car. | `lp` + sortie papier | ✅ vérifié |
 | LAN / IPP | CUPS écoute `0.0.0.0:631`, IPP répond, mDNS annonce, job envoyé via l'IP LAN | `ss`, `curl`, `avahi-browse`, `lp -h <ip>` | ✅ vérifié |
+| Scanner (SANE) | appareil détecté, scans **gris et couleur** produits | `scanimage -L`, `scanimage` (PNG + PNM) | ✅ vérifié |
+| Scanner udev | règle constructeur (mode 0666 sur *tous* les USB) remplacée par une règle Kyocera + groupe `scanner` ; scan toujours fonctionnel | `ls -l /dev/bus/usb/...`, `scanimage` | ✅ vérifié |
+| Frontend scanner | `simple-scan` installé | `apt`, SANE | ✅ installé (GUI non automatisée) |
 | Chromebook | ajout via IPP / auto-découverte | étapes documentées | ⚠️ documenté, non testé sur appareil |
 | Windows 10/11 | ajout de l'imprimante partagée par URL | étapes documentées | ⚠️ documenté, non testé sur appareil |
 | Android / iOS | découverte Mopria / AirPrint | étapes documentées | ⚠️ documenté, non testé sur appareil |
@@ -91,7 +94,8 @@ déprécie : garder un filtre libre et maintenable est donc la voie durable.
 ppd/        PPD Kyocera d'origine (MIT) + PPD modifié pour rastertokpsl-re
 filters/    wrapper anti-débordement pour le binaire propriétaire
 patches/    patch de portabilité pour rastertokpsl-re (glibc moderne)
-scripts/    scripts d'installation / désinstallation / reset USB
+scripts/    scripts d'installation / désinstallation / reset USB / SANE Kyocera
+udev/       règle udev resserrée pour l'accès scanner (groupe scanner)
 systemd/    hook systemd-sleep (ré-énumération USB au réveil)
 examples/   guide utilisateur « comment imprimer » (HTML + PDF)
 docs/       investigations complètes (FR + EN)
@@ -143,6 +147,36 @@ Un guide utilisateur prêt à imprimer se trouve dans
 
 **Important :** l'hôte Linux doit rester allumé et éveillé — l'imprimante y est
 branchée en USB. Il joue le rôle de serveur d'impression.
+
+## Numérisation (SANE) — oui, ça marche aussi
+
+La partie scanner du MFP est une interface USB distincte (classe *vendor
+specific*) ; elle n'est **pas** gérée par les backends SANE livrés avec Debian.
+Kyocera fournit un pilote SANE Linux (**v2.2.1511**, 2025, avec un `.deb`
+`amd64` natif) qui gère ce modèle d'emblée (`kyocera.conf` liste l'USB ID
+`0x0482 0x04FD`, soit la FS-1220MFP).
+
+```sh
+sudo ./scripts/install-kyocera-sane.sh     # télécharge chez Kyocera, installe, sécurise udev
+scanimage -L                               # -> kyocera:libusb:... Kyocera FS-1220 ...
+scanimage --resolution 300 --mode Gray -o scan.png
+```
+
+Ou simplement une interface graphique : `simple-scan` (recommandé), `skanlite`,
+`xsane`, `gscan2pdf`.
+
+Deux écueils, tous deux gérés par le script :
+
+1. Le `.deb` Kyocera dépend d'un paquet nommé `libsane`, qui n'existe plus sur
+   les Debian modernes (la bibliothèque est dans `libsane1`). Le script installe
+   un paquet factice pour que `apt` reste cohérent.
+2. Le pilote embarque une **règle udev dangereuse** qui met `MODE:="0666"` sur
+   *presque tous les périphériques USB*. Le script la remplace par une règle
+   limitée aux appareils Kyocera (vendeur `0482`) et au groupe `scanner`.
+
+Le pilote SANE Kyocera est **propriétaire, gratuit, et non redistribué ici** —
+le script le télécharge depuis le site de support Kyocera. Voir
+[`CREDITS.md`](CREDITS.md).
 
 ## Applicable à d'autres modèles ?
 

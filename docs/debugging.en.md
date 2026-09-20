@@ -285,6 +285,40 @@ systemd-sleep hook re-enumerates the USB device on resume by toggling its
 
 ---
 
+## 5b. Scanner (SANE)
+
+The scanner is the MFP's second USB interface (vendor-specific class),
+independent from the printer interface. Upstream SANE ships no backend for it.
+Kyocera provides a Linux SANE driver (v2.2.1511) whose `kyocera` backend already
+lists the USB ID `0x0482 0x04FD` (the FS-1220MFP).
+
+Steps (automated by [`../scripts/install-kyocera-sane.sh`](../scripts/install-kyocera-sane.sh)):
+
+1. Download the SANE driver ZIP from Kyocera (see [`../CREDITS.md`](../CREDITS.md)),
+   install `kyocera-sane_2.2.1511_amd64.deb`.
+2. The `.deb` depends on the package name `libsane`, which no longer exists on
+   modern Debian (the library is in `libsane1`). Installing a trivial dummy
+   `libsane` package that depends on `libsane1` keeps `apt` consistent (this is
+   preferable to `dpkg --force-depends`, which leaves `apt` broken).
+3. The driver ships a udev rule granting `MODE:="0666"` to almost every USB
+   device. Replace it with
+   [`../udev/40-scanner-permissions.rules`](../udev/40-scanner-permissions.rules)
+   (Kyocera vendor `0482` only, `scanner` group), then reload udev.
+
+Verified on the test machine:
+
+```console
+$ scanimage -L
+device `kyocera:libusb:001:009' is a Kyocera FS-1220 multi-functional device
+$ scanimage --resolution 200 --mode Gray -o scan.png   # OK (gray)
+$ scanimage --resolution 200 --mode Color -o scan.pnm  # OK (color)
+$ ls -l /dev/bus/usb/001/009
+crw-rw---- 1 root scanner 189, 8 ... /dev/bus/usb/001/009
+```
+
+Note: the backend **rounds** resolution requests (e.g. 100/150 → 200 dpi). A GUI
+frontend (`simple-scan`, `skanlite`, `xsane`, `gscan2pdf`) works on top of it.
+
 ## 6. Summary of system changes
 
 | Item | Action |
@@ -297,5 +331,7 @@ systemd-sleep hook re-enumerates the USB device on resume by toggling its
 | `/etc/cups/cupsd.conf` | `Listen 0.0.0.0:631` + `Allow @LOCAL` |
 | `/usr/local/sbin/kyocera-usb-reset.sh` | USB reset helper |
 | `/usr/lib/systemd/system-sleep/kyocera-usb-reset` | systemd-sleep hook |
+| `kyocera-sane` + dummy `libsane` | scanner driver and `apt` shim |
+| `/etc/udev/rules.d/40-scanner-permissions.rules` | tightened Kyocera-only scanner rule |
 
 CUPS queue: `Kyocera_FS-1220MFP`, PPD `Kyocera_FS-1220MFPGDI_RE.ppd`.

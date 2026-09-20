@@ -1,0 +1,14 @@
+# Kyocera scanner access (USB vendor 0x0482).
+#
+# The Kyocera SANE driver ships /etc/udev/rules.d/40-scanner-permissions.rules
+# which sets MODE:="0666" on ALMOST EVERY USB device (any local user could then
+# access keyboards, storage, etc.). This replacement grants access only to
+# Kyocera devices and only to members of the "scanner" group.
+#
+# Install as /etc/udev/rules.d/40-scanner-permissions.rules (replacing the
+# vendor file), then:
+#   sudo udevadm control --reload-rules && sudo udevadm trigger
+# Make sure your user is in the "scanner" group:
+#   sudo usermod -aG scanner "$USER"   # then log out / back in
+
+SUBSYSTEM=="usb", ENV{DEVTYPE}=="usb_device", ATTR{idVendor}=="0482", MODE="0660", GROUP="scanner"

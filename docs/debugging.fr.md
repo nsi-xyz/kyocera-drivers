@@ -359,6 +359,42 @@ sudo systemctl restart cups
 
 ---
 
+## 5b. Scanner (SANE)
+
+Le scanner est la seconde interface USB du MFP (classe *vendor specific*),
+indépendante de l'interface d'impression. SANE en amont ne fournit aucun backend
+pour cet appareil. Kyocera propose un pilote SANE Linux (v2.2.1511) dont le
+backend `kyocera` liste déjà l'USB ID `0x0482 0x04FD` (la FS-1220MFP).
+
+Étapes (automatisées par
+[`../scripts/install-kyocera-sane.sh`](../scripts/install-kyocera-sane.sh)) :
+
+1. Télécharger le ZIP du pilote SANE chez Kyocera (voir [`../CREDITS.md`](../CREDITS.md))
+   et installer `kyocera-sane_2.2.1511_amd64.deb`.
+2. Le `.deb` dépend du nom de paquet `libsane`, qui n'existe plus sur les Debian
+   modernes (la bibliothèque est dans `libsane1`). Installer un paquet factice
+   `libsane` dépendant de `libsane1` maintient `apt` cohérent (préférable à
+   `dpkg --force-depends`, qui casse `apt`).
+3. Le pilote installe une règle udev accordant `MODE:="0666"` à presque tous les
+   périphériques USB. La remplacer par
+   [`../udev/40-scanner-permissions.rules`](../udev/40-scanner-permissions.rules)
+   (vendeur Kyocera `0482` uniquement, groupe `scanner`), puis recharger udev.
+
+Vérifié sur la machine de test :
+
+```console
+$ scanimage -L
+device `kyocera:libusb:001:009' is a Kyocera FS-1220 multi-functional device
+$ scanimage --resolution 200 --mode Gray -o scan.png   # OK (gris)
+$ scanimage --resolution 200 --mode Color -o scan.pnm  # OK (couleur)
+$ ls -l /dev/bus/usb/001/009
+crw-rw---- 1 root scanner 189, 8 ... /dev/bus/usb/001/009
+```
+
+Remarque : le backend **arrondit** la résolution demandée (ex. 100/150 → 200 dpi).
+Une interface graphique (`simple-scan`, `skanlite`, `xsane`, `gscan2pdf`)
+fonctionne par-dessus.
+
 ## 6. Récapitulatif des modifications système
 
 | Élément | Action |
@@ -368,6 +404,8 @@ sudo systemctl restart cups
 | `/usr/lib/cups/filter/rastertokpsl.bin` | binaire Kyocera d'origine (sauvegarde) |
 | `/usr/local/sbin/kyocera-usb-reset.sh` | reset USB à la reprise |
 | `/usr/lib/systemd/system-sleep/kyocera-usb-reset` | hook systemd-sleep |
+| `kyocera-sane` + factice `libsane` | pilote scanner et calage `apt` |
+| `/etc/udev/rules.d/40-scanner-permissions.rules` | règle scanner resserrée (Kyocera) |
 | `/usr/lib/cups/filter/rastertokpsl-re` | filtre KPSL libre (remplace le proprio) |
 | `Kyocera_FS-1220MFP.ppd` | PPD `_RE` (filtre libre) — file principale |
 | `Kyocera_RE` | file de test du filtre libre — **supprimée** après validation |

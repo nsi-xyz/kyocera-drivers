@@ -15,6 +15,13 @@ scripts and configuration are.
 | [CUPS](https://github.com/OpenPrinting/cups) | Apache-2.0 | Printing system: PPD/filter model, IPP server, `cupsfilter`, backends. |
 | [Debian `libcupsimage2t64`](https://packages.debian.org/trixie/libcupsimage2t64) | (CUPS, Apache-2.0) | Provides the missing `libcupsimage.so.2`. |
 | Ghostscript (`gstoraster` / `pdftoraster` path) | AGPL-3.0 | Converts PDF/PostScript to CUPS raster before the KPSL filter. |
+| **Kyocera SANE Driver** v2.2.1511 | proprietary, **free of charge — not redistributed here** | Scanner backend for Kyocera MFPs. Downloaded at install time from Kyocera's support site by `scripts/install-kyocera-sane.sh`. |
+| [SANE](http://www.sane-project.org/) (`sane-backends`, Debian `libsane1`) | GPL-2.0-or-later / LGPL-2.0-or-later | Scanner access library and API. |
+| [`simple-scan`](https://gitlab.gnome.org/GNOME/simple-scan) | GPL-3.0 | Optional GUI scanning frontend. |
+
+The dummy `libsane` package built by `scripts/install-kyocera-sane.sh` is our own
+work (MIT); it exists only to satisfy the Kyocera `.deb` dependency on the
+historical package name.
 
 The `kpslcmp.pl` / `data_kpslcmp.pl` comparison scripts used for validation come
 from the `rastertokpsl-re` project (Apache-2.0).
@@ -28,7 +35,9 @@ from the `rastertokpsl-re` project (Apache-2.0).
   family): <https://bbs.archlinux.org/viewtopic.php?id=272961>
 - Linux Mint Forums — *“Kyocera FS-1220MFP debugging”* (jobs stuck in “processing”):
   <https://forums.linuxmint.com/viewtopic.php?t=432668>
-- Kyocera Document Solutions — product support / downloads page for the FS-1220MFP.
+- Kyocera Document Solutions — product support / downloads page for the FS-1220MFP,
+  including the **SANE Driver (2.2.1511)** and the CD ISO image:
+  <https://www.kyoceradocumentsolutions.eu/en/support/downloads.name-L2V1L2VuL21mcC9GUzEyMjBNRlA=.html>
 - Debian package tracker and `libcupsimage2t64` details (the `t64` rename):
   <https://packages.debian.org/trixie/libcupsimage2t64>
 
@@ -36,7 +45,8 @@ from the `rastertokpsl-re` project (Apache-2.0).
 
 `ldd`, `cupsfilter`, `cupsd` / CUPS `error_log`, `lpadmin`, `lp`, `lpstat`,
 `runuser`, `systemd-coredump` / `coredumpctl`, `gdb`, `avahi-browse`, `curl`,
-`7z` (ISO inspection), `pdfinfo`/`pdftotext`, headless Google Chrome (HTML→PDF).
+`7z` (ISO inspection), `pdfinfo`/`pdftotext`, `scanimage`, ImageMagick
+`identify`, headless Google Chrome (HTML→PDF).
 
 ## Licensing of this repository's own content
 
